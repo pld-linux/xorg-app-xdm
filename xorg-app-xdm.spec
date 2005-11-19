@@ -3,12 +3,12 @@ Summary(pl):	XDM - zarz±dca ekranów z obs³ug± XDMCP i wybieraniem hostów
 Summary(ru):	íÅÎÅÄÖÅÒ ÄÉÓÐÌÅÑ X
 Summary(uk):	íÅÎÅÄÖÅÒ ÄÉÓÐÌÅÀ X
 Name:		xorg-app-xdm
-Version:	0.99.2
+Version:	0.99.3
 Release:	0.1
 License:	MIT
 Group:		X11/Applications
-Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC1/app/xdm-%{version}.tar.bz2
-# Source0-md5:	0e6403a60f50662b30f77322c0f54068
+Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC2/app/xdm-%{version}.tar.bz2
+# Source0-md5:	99d9dbbbcc16726050ce09fd62b5c1e6
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -58,7 +58,8 @@ terminali oraz standardem X Consortium XDMCP.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-%configure
+%configure \
+	--disable-static
 
 %{__make}
 
@@ -67,6 +68,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+rm -f $RPM_BUILD_ROOT%{_libdir}/X11/xdm/libXdmGreet.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -78,6 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/xdmshell
 %{_libdir}/X11/app-defaults/Chooser
 %dir %{_libdir}/X11/xdm
+%attr(755,root,root) %{_libdir}/X11/xdm/libXdmGreet.so
 %attr(755,root,root) %{_libdir}/X11/xdm/GiveConsole
 %attr(755,root,root) %{_libdir}/X11/xdm/TakeConsole
 %{_libdir}/X11/xdm/Xaccess
