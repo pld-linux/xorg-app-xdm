@@ -3,12 +3,12 @@ Summary(pl):	XDM - zarz±dca ekranów z obs³ug± XDMCP i wybieraniem hostów
 Summary(ru):	íÅÎÅÄÖÅÒ ÄÉÓÐÌÅÑ X
 Summary(uk):	íÅÎÅÄÖÅÒ ÄÉÓÐÌÅÀ X
 Name:		xorg-app-xdm
-Version:	0.99.3
+Version:	0.99.4
 Release:	0.1
 License:	MIT
 Group:		X11/Applications
-Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC2/app/xdm-%{version}.tar.bz2
-# Source0-md5:	99d9dbbbcc16726050ce09fd62b5c1e6
+Source0:	http://xorg.freedesktop.org/releases/X11R7.0-RC3/app/xdm-%{version}.tar.bz2
+# Source0-md5:	8ea0b887baf9d702c883f8e85fb100b8
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -20,7 +20,7 @@ BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-xtrans-devel
-BuildRequires:	xorg-util-util-macros >= 0.99.1
+BuildRequires:	xorg-util-util-macros >= 0.99.2
 Requires:	xorg-app-sessreg
 Provides:	XDM
 Provides:	xdm = %{version}-%{release}
@@ -95,4 +95,4 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/X11/xdm/chooser
 %{_libdir}/X11/xdm/pixmaps
 %{_libdir}/X11/xdm/xdm-config
-%{_mandir}/man1/xdm.1*
+%{_mandir}/man1/xdm.1x*
