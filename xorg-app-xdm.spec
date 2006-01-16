@@ -23,6 +23,7 @@ BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.2
 Requires:	xorg-app-sessreg
+Requires:	xorg-lib-libXt >= 1.0.0
 Provides:	XDM
 Provides:	xdm = %{version}-%{release}
 Obsoletes:	X11-xdm
