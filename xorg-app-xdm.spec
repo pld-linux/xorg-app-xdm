@@ -10,7 +10,7 @@ Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/app/xdm-%{version}.tar.bz2
 # Source0-md5:	883c66b4ce39754b8111fa1e8bc0933c
 Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
-# Source7-md5:	0a15b1c374256b5cad7961807baa3896
+# Source1-md5:	0a15b1c374256b5cad7961807baa3896
 Source2:	xdm.pamd
 Source3:	xdm.init
 Source4:	xdm.sysconfig
