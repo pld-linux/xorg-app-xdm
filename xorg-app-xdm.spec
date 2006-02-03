@@ -9,12 +9,18 @@ License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/app/xdm-%{version}.tar.bz2
 # Source0-md5:	883c66b4ce39754b8111fa1e8bc0933c
+Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
+# Source7-md5:	0a15b1c374256b5cad7961807baa3896
+Source2:	xdm.pamd
+Source3:	xdm.init
+Source4:	xdm.sysconfig
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig >= 1:0.19
+BuildRequires:	sed >= 4.0
 BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXinerama-devel
@@ -53,7 +59,9 @@ terminali oraz standardem X Consortium XDMCP.
 Менеджер дисплею X.
 
 %prep
-%setup -q -n xdm-%{version}
+%setup -q -n xdm-%{version} -a1
+
+sed -i -e 's:DEF_AUTH_DIR, XDMCONFIGDIR,:DEF_AUTH_DIR, /var/lib/xdm,:' configure.ac
 
 %build
 %{__aclocal}
@@ -61,17 +69,32 @@ terminali oraz standardem X Consortium XDMCP.
 %{__autoheader}
 %{__automake}
 %configure \
-	--disable-static
+	--disable-static \
+	--with-pixmapdir=%{_sysconfdir}/X11/xdm/pixmaps \
+	--with-xdmconfigdir=%{_sysconfdir}/X11/xdm \
+	--with-xdmscriptdir=%{_sysconfdir}/X11/xdm
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/var/lib/xdm
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/X11/xdm/libXdmGreet.la
+
+# set up PLD xdm config
+rm -f $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm/{*Console,Xaccess,Xsession,Xsetup*}
+install xdm-xinitrc-*/pixmaps/* $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm/pixmaps
+install xdm-xinitrc-*/{*Console,Xaccess,Xsession,Xsetup*} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm
+
+install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xdm
+install -D %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/xdm
+install -D %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/xdm
+install -d $RPM_BUILD_ROOT/etc/security
+:> $RPM_BUILD_ROOT/etc/security/blacklist.xdm
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -84,17 +107,26 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/X11/app-defaults/Chooser
 %dir %{_libdir}/X11/xdm
 %attr(755,root,root) %{_libdir}/X11/xdm/libXdmGreet.so
-%attr(755,root,root) %{_libdir}/X11/xdm/GiveConsole
-%attr(755,root,root) %{_libdir}/X11/xdm/TakeConsole
-%{_libdir}/X11/xdm/Xaccess
-%attr(755,root,root) %{_libdir}/X11/xdm/Xreset
-%{_libdir}/X11/xdm/Xresources
-%{_libdir}/X11/xdm/Xservers
-%attr(755,root,root) %{_libdir}/X11/xdm/Xsession
-%attr(755,root,root) %{_libdir}/X11/xdm/Xsetup_0
-%attr(755,root,root) %{_libdir}/X11/xdm/Xstartup
-%attr(755,root,root) %{_libdir}/X11/xdm/Xwilling
 %attr(755,root,root) %{_libdir}/X11/xdm/chooser
-%{_libdir}/X11/xdm/pixmaps
-%{_libdir}/X11/xdm/xdm-config
+%dir %{_sysconfdir}/X11/xdm
+# scripts
+%attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/GiveConsole
+%attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/TakeConsole
+%attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/Xreset
+%attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/Xsession
+%attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/Xsetup_0
+%attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/Xstartup
+%attr(755,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/Xwilling
+# configs
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/Xaccess
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/Xresources
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/Xservers
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/X11/xdm/xdm-config
+# pixmaps
+%{_sysconfdir}/X11/xdm/pixmaps
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xdm
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xdm
+%attr(754,root,root) /etc/rc.d/init.d/xdm
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/xdm
+%dir /var/lib/xdm
 %{_mandir}/man1/xdm.1x*
