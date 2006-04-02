@@ -1,14 +1,16 @@
+# TODO: update Xsession from xdm-xinitrc to use mktemp like original Xsession!
+# - drop /usr/X11R6/bin from $PATH setting in Xsession
 Summary:	xdm - X Display Manager with support for XDMCP, host chooser
 Summary(pl):	XDM - zarz±dca ekranów z obs³ug± XDMCP i wybieraniem hostów
 Summary(ru):	íÅÎÅÄÖÅÒ ÄÉÓÐÌÅÑ X
 Summary(uk):	íÅÎÅÄÖÅÒ ÄÉÓÐÌÅÀ X
 Name:		xorg-app-xdm
-Version:	1.0.1
+Version:	1.0.3
 Release:	0.1
 License:	MIT
 Group:		X11/Applications
-Source0:	http://xorg.freedesktop.org/releases/X11R7.0/src/app/xdm-%{version}.tar.bz2
-# Source0-md5:	883c66b4ce39754b8111fa1e8bc0933c
+Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
+# Source0-md5:	4540fd015672f8fb8590ab16f4974cfe
 Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
 # Source1-md5:	0a15b1c374256b5cad7961807baa3896
 Source2:	xdm.pamd
@@ -18,6 +20,7 @@ URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	cpp
+BuildRequires:	libtool
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig >= 1:0.19
 BuildRequires:	sed >= 4.0
@@ -28,6 +31,7 @@ BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.2
+Requires:	mktemp
 Requires:	xorg-app-sessreg
 Requires:	xorg-lib-libXt >= 1.0.0
 Provides:	XDM
@@ -64,6 +68,7 @@ terminali oraz standardem X Consortium XDMCP.
 sed -i -e 's:DEF_AUTH_DIR, XDMCONFIGDIR,:DEF_AUTH_DIR, /var/lib/xdm,:' configure.ac
 
 %build
+%{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__autoheader}
