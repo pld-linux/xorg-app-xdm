@@ -1,5 +1,3 @@
-# TODO: update Xsession from xdm-xinitrc to use mktemp like original Xsession!
-# - drop /usr/X11R6/bin from $PATH setting in Xsession
 Summary:	xdm - X Display Manager with support for XDMCP, host chooser
 Summary(pl):	XDM - zarz±dca ekranów z obs³ug± XDMCP i wybieraniem hostów
 Summary(ru):	íÅÎÅÄÖÅÒ ÄÉÓÐÌÅÑ X
@@ -16,6 +14,7 @@ Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
 Source2:	xdm.pamd
 Source3:	xdm.init
 Source4:	xdm.sysconfig
+Patch0:		%{name}-Xsession.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -64,6 +63,7 @@ terminali oraz standardem X Consortium XDMCP.
 
 %prep
 %setup -q -n xdm-%{version} -a1
+%patch0 -p1
 
 sed -i -e 's:DEF_AUTH_DIR, XDMCONFIGDIR,:DEF_AUTH_DIR, /var/lib/xdm,:' configure.ac
 
