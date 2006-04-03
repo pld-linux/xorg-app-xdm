@@ -1,0 +1,40 @@
+--- xdm-1.0.3/xdm-xinitrc-0.2/Xsession.orig	2000-11-01 20:06:03.000000000 +0000
++++ xdm-1.0.3/xdm-xinitrc-0.2/Xsession	2006-04-03 12:53:54.897645000 +0000
+@@ -2,19 +2,25 @@
+ # Copyright (c) 1999, 2000 Red Hat, Inc.
+ 
+ # redirect errors to a file in user's home directory if we can
+-for errfile in "${TMPDIR-/tmp}/.xsession-$USER" \
+-		"/tmp/.xsession-$USER" \
+-		"$HOME/.xsession-errors"
+-do
+-	if cp /dev/null "$errfile" 2> /dev/null ; then
+-		chmod 600 "$errfile"
+-		exec > "$errfile" 2>&1
+-		break
+-	fi
+-done
++errfile="$HOME/.xsession-errors"
++if ( umask 077 && cp /dev/null "$errfile" 2> /dev/null )
++then
++	exec > "$errfile" 2>&1
++else
++
++	mktemp=/bin/mktemp
++ 	for errfile in "${TMPDIR-/tmp}/.xsession-$USER" "/tmp/.xsession-$USER"
++	do
++		if ef="$( umask 077 && $mktemp "$errfile.XXXXXX" 2> /dev/null)"
++		then
++			exec > "$ef" 2>&1
++			mv "$ef" "$errfile" 2> /dev/null
++ 			break
++ 		fi
++	done
++fi
+ 
+-[ "`echo $PATH | grep -q /usr/X11R6/bin`" = "" ] && PATH="${PATH}:/usr/X11R6/bin"
+-[ "`echo $PATH | grep -q "$HOME/bin"`" = "" ] && PATH="$PATH:$HOME/bin"
++[ "`echo $PATH | grep "$HOME/bin" 2>/dev/null`" = "" ] && PATH="$PATH:$HOME/bin"
+ 
+ userresources=$HOME/.Xresources
+ usermodmap=$HOME/.Xmodmap
