@@ -75,6 +75,7 @@ sed -i -e 's:DEF_AUTH_DIR, XDMCONFIGDIR,:DEF_AUTH_DIR, /var/lib/xdm,:' configure
 %{__automake}
 %configure \
 	--disable-static \
+	--with-default-vt=vt9 \
 	--with-pixmapdir=%{_sysconfdir}/X11/xdm/pixmaps \
 	--with-xdmconfigdir=%{_sysconfdir}/X11/xdm \
 	--with-xdmscriptdir=%{_sysconfdir}/X11/xdm
