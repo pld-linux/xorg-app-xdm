@@ -4,7 +4,7 @@ Summary(ru):	Менеджер дисплея X
 Summary(uk):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.0
-Release:	0.1
+Release:	0.2
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -30,7 +30,12 @@ BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-util-util-macros >= 0.99.2
+Requires(post,preun):	/sbin/chkconfig
 Requires:	mktemp
+Requires:	pam >= 0.79.0
+Requires:	rc-scripts
+Requires:	xorg-app-xconsole
+Requires:	xorg-app-xsetroot
 Requires:	xorg-app-sessreg
 Requires:	xorg-lib-libXt >= 1.0.0
 Provides:	XDM
@@ -66,6 +71,8 @@ terminali oraz standardem X Consortium XDMCP.
 %patch0 -p1
 
 sed -i -e 's:DEF_AUTH_DIR, XDMCONFIGDIR,:DEF_AUTH_DIR, /var/lib/xdm,:' configure.ac
+
+sed -i -e 's:/usr/X11R6/bin:/usr/bin:' xdm-xinitrc-*/{Xsetup_0,GiveConsole,TakeConsole}
 
 %build
 %{__libtoolize}
@@ -104,6 +111,21 @@ install -d $RPM_BUILD_ROOT/etc/security
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+/sbin/chkconfig --add xdm
+if [ -f /var/lock/subsys/xdm ]; then
+	echo "Run \"/sbin/service xdm restart\" to restart xdm." >&2
+	echo "WARNING: it will terminate all sessions opened from xdm!" >&2
+else
+	echo "Run \"/sbin/service xdm start\" to start xdm." >&2
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del xdm
+	%service xdm stop
+fi
 
 %files
 %defattr(644,root,root,755)
