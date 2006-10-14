@@ -4,7 +4,7 @@ Summary(ru):	Менеджер дисплея X
 Summary(uk):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.0
-Release:	0.3
+Release:	0.4
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -15,6 +15,7 @@ Source2:	xdm.pamd
 Source3:	xdm.init
 Source4:	xdm.sysconfig
 Patch0:		%{name}-Xsession.patch
+Patch1:		%{name}-pam_tty.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -71,10 +72,14 @@ terminali oraz standardem X Consortium XDMCP.
 %prep
 %setup -q -n xdm-%{version} -a1
 %patch0 -p1
+%patch1 -p1
 
 sed -i -e 's:DEF_AUTH_DIR, XDMCONFIGDIR,:DEF_AUTH_DIR, /var/lib/xdm,:' configure.ac
 
+# fix old PLD configs
 sed -i -e 's:/usr/X11R6/bin:/usr/bin:' xdm-xinitrc-*/{Xsetup_0,GiveConsole,TakeConsole}
+# fix broken xorg paths
+sed -i -e 's:/usr/X11R6/bin:/usr/bin:' config/{Xstartup,Xreset}
 
 %build
 %{__libtoolize}
