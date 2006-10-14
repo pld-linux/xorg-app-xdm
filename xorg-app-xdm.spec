@@ -4,7 +4,7 @@ Summary(ru):	Менеджер дисплея X
 Summary(uk):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.0
-Release:	0.2
+Release:	0.3
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -35,9 +35,11 @@ Requires:	mktemp
 Requires:	pam >= 0.79.0
 Requires:	rc-scripts
 Requires:	xorg-app-xconsole
+Requires:	xorg-app-xrdb
 Requires:	xorg-app-xsetroot
 Requires:	xorg-app-sessreg
 Requires:	xorg-lib-libXt >= 1.0.0
+Requires:	xterm
 Provides:	XDM
 Provides:	xdm = %{version}-%{release}
 Obsoletes:	X11-xdm
@@ -81,6 +83,8 @@ sed -i -e 's:/usr/X11R6/bin:/usr/bin:' xdm-xinitrc-*/{Xsetup_0,GiveConsole,TakeC
 %{__autoheader}
 %{__automake}
 %configure \
+	DEF_SYSTEM_PATH="/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin" \
+	DEF_USER_PATH="/usr/local/bin:/usr/bin:/bin" \
 	--disable-static \
 	--with-default-vt=vt9 \
 	--with-pixmapdir=%{_sysconfdir}/X11/xdm/pixmaps \
