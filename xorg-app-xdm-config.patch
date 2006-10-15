@@ -1,0 +1,68 @@
+--- xdm-1.1.0/config/Xreset.orig	2006-07-11 04:52:23.000000000 +0200
++++ xdm-1.1.0/config/Xreset	2006-10-15 02:17:46.910246250 +0200
+@@ -1,5 +1,5 @@
+ #!/bin/sh
+ # Deregister a login. (Derived from TakeConsole as follows:)
+ #
+-/usr/X11R6/bin/sessreg -d -w "/var/log/wtmp" -u "/var/run/utmp" \
++/usr/bin/sessreg -d -w "/var/log/wtmp" -u "/var/run/utmp" \
+ 	-x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
+--- xdm-1.1.0/config/Xstartup.orig	2006-07-11 04:52:23.000000000 +0200
++++ xdm-1.1.0/config/Xstartup	2006-10-15 02:17:41.909933750 +0200
+@@ -1,5 +1,5 @@
+ #!/bin/sh
+ # Register a login (derived from GiveConsole as follows:)
+ #
+-/usr/X11R6/bin/sessreg  -a -w "/var/log/wtmp" -u "/var/run/utmp" \
++/usr/bin/sessreg  -a -w "/var/log/wtmp" -u "/var/run/utmp" \
+ 	-x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
+--- xdm-1.1.0/config/Xresources.cpp.orig	2006-08-14 20:12:34.000000000 +0200
++++ xdm-1.1.0/config/Xresources.cpp	2006-10-15 02:18:19.860305500 +0200
+@@ -78,7 +78,7 @@
+ #endif /* XPM */
+ XHASHendif
+ #ifdef XPM
+-XHASHif PLANES >= 8
++XHASHif PLANES > 8
+ xlogin*logoFileName: BITMAPDIR/**//XDM_PIXMAP
+ XHASHelse
+ xlogin*logoFileName: BITMAPDIR/**//XDM_BWPIXMAP
+--- xdm-1.1.0/xdm-xinitrc-0.2/GiveConsole.orig	2000-10-29 20:59:44.000000000 +0100
++++ xdm-1.1.0/xdm-xinitrc-0.2/GiveConsole	2006-10-15 02:18:00.359086750 +0200
+@@ -8,4 +8,4 @@
+ # causing serious grief.
+ #
+ chown $USER /dev/console
+-/usr/X11R6/bin/sessreg  -a -x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
++/usr/bin/sessreg  -a -x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
+--- xdm-1.1.0/xdm-xinitrc-0.2/TakeConsole.orig	2000-10-29 20:59:44.000000000 +0100
++++ xdm-1.1.0/xdm-xinitrc-0.2/TakeConsole	2006-10-15 02:18:07.591538750 +0200
+@@ -5,4 +5,4 @@
+ #
+ chmod 622 /dev/console
+ chown root /dev/console
+-/usr/X11R6/bin/sessreg -d -x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
++/usr/bin/sessreg -d -x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
+--- xdm-1.1.0/configure.ac.orig	2006-10-04 03:11:27.000000000 +0200
++++ xdm-1.1.0/configure.ac	2006-10-15 02:17:10.495970500 +0200
+@@ -216,6 +216,11 @@
+ 	[XDMPIDDIR="$withval"], [XDMPIDDIR="/var/run"])
+ AC_SUBST(XDMPIDDIR)
+ 
++AC_ARG_WITH(xdmauthdir,
++	AC_HELP_STRING([--with-xdmauthdir=<pathname>],
++	  [specify directory for authentication cookie files (default=configdir)]),
++	[XDMAUTHDIR="$withval"], [XDMAUTHDIR="$XDMCONFIGDIR"])
++
+ AC_ARG_WITH(default-vt,
+ 	AC_HELP_STRING([--with-default-vt=<vtname>],
+ 	  [specify default vt to start xdm on (default=none)]),
+@@ -494,7 +499,7 @@
+ 
+ # -DDEF_AUTH_DIR="$(XDMDIR)"
+ 
+-AC_DEFINE_DIR(DEF_AUTH_DIR, XDMCONFIGDIR, 
++AC_DEFINE_DIR(DEF_AUTH_DIR, XDMAUTHDIR, 
+ 	[Define to pathname where authentication cookie files should be stored])
+ 
+ # -DDEF_GREETER_LIB="$(XDMDIR)/libXdmGreet.so"
