@@ -4,7 +4,7 @@ Summary(ru):	Менеджер дисплея X
 Summary(uk):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.0
-Release:	0.4
+Release:	0.5
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -91,6 +91,8 @@ sed -i -e 's:/usr/X11R6/bin:/usr/bin:' config/{Xstartup,Xreset}
 	DEF_SYSTEM_PATH="/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin" \
 	DEF_USER_PATH="/usr/local/bin:/usr/bin:/bin" \
 	--disable-static \
+	--with-bw-pixmap=xdm-pld-logo-bw.xpm \
+	--with-color-pixmap=xdm-pld-logo.xpm \
 	--with-default-vt=vt9 \
 	--with-pixmapdir=%{_sysconfdir}/X11/xdm/pixmaps \
 	--with-xdmconfigdir=%{_sysconfdir}/X11/xdm \
