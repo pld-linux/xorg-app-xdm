@@ -4,7 +4,7 @@ Summary(ru):	Менеджер дисплея X
 Summary(uk):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.0
-Release:	0.5
+Release:	0.6
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -16,6 +16,7 @@ Source3:	xdm.init
 Source4:	xdm.sysconfig
 Patch0:		%{name}-Xsession.patch
 Patch1:		%{name}-pam_tty.patch
+Patch2:		%{name}-config.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -23,7 +24,6 @@ BuildRequires:	cpp
 BuildRequires:	libtool
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig >= 1:0.19
-BuildRequires:	sed >= 4.0
 BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXinerama-devel
@@ -73,13 +73,7 @@ terminali oraz standardem X Consortium XDMCP.
 %setup -q -n xdm-%{version} -a1
 %patch0 -p1
 %patch1 -p1
-
-sed -i -e 's:DEF_AUTH_DIR, XDMCONFIGDIR,:DEF_AUTH_DIR, /var/lib/xdm,:' configure.ac
-
-# fix old PLD configs
-sed -i -e 's:/usr/X11R6/bin:/usr/bin:' xdm-xinitrc-*/{Xsetup_0,GiveConsole,TakeConsole}
-# fix broken xorg paths
-sed -i -e 's:/usr/X11R6/bin:/usr/bin:' config/{Xstartup,Xreset}
+%patch2 -p1
 
 %build
 %{__libtoolize}
@@ -95,6 +89,7 @@ sed -i -e 's:/usr/X11R6/bin:/usr/bin:' config/{Xstartup,Xreset}
 	--with-color-pixmap=xdm-pld-logo.xpm \
 	--with-default-vt=vt9 \
 	--with-pixmapdir=%{_sysconfdir}/X11/xdm/pixmaps \
+	--with-xdmauthdir=/var/lib/xdm \
 	--with-xdmconfigdir=%{_sysconfdir}/X11/xdm \
 	--with-xdmscriptdir=%{_sysconfdir}/X11/xdm
 
