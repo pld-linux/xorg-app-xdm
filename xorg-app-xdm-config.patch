@@ -1,21 +1,19 @@
---- xdm-1.1.0/config/Xreset.orig	2006-07-11 04:52:23.000000000 +0200
-+++ xdm-1.1.0/config/Xreset	2006-10-15 02:17:46.910246250 +0200
-@@ -1,5 +1,5 @@
- #!/bin/sh
- # Deregister a login. (Derived from TakeConsole as follows:)
- #
--/usr/X11R6/bin/sessreg -d -w "/var/log/wtmp" -u "/var/run/utmp" \
-+/usr/bin/sessreg -d -w "/var/log/wtmp" -u "/var/run/utmp" \
- 	-x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
---- xdm-1.1.0/config/Xstartup.orig	2006-07-11 04:52:23.000000000 +0200
-+++ xdm-1.1.0/config/Xstartup	2006-10-15 02:17:41.909933750 +0200
-@@ -1,5 +1,5 @@
- #!/bin/sh
- # Register a login (derived from GiveConsole as follows:)
- #
--/usr/X11R6/bin/sessreg  -a -w "/var/log/wtmp" -u "/var/run/utmp" \
-+/usr/bin/sessreg  -a -w "/var/log/wtmp" -u "/var/run/utmp" \
- 	-x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
+--- xdm-1.1.1/config/Xreset.cpp.orig	2006-11-06 22:02:49.000000000 +0000
++++ xdm-1.1.1/config/Xreset.cpp	2006-11-15 08:45:26.669505000 +0000
+@@ -2,4 +2,4 @@
+ XCOMM Deregister a login. (Derived from TakeConsole as follows:)
+ XCOMM
+ BINDIR/sessreg -d -w "/var/log/wtmp" -u "/var/run/utmp" \
+-	-x "XDMCONFIGDIR/Xservers" -l $DISPLAY -h "" $USER
++	-x XDMCONFIGDIR/Xservers -l $DISPLAY -h "" $USER
+--- xdm-1.1.1/config/Xstartup.cpp.orig	2006-11-06 22:02:40.000000000 +0000
++++ xdm-1.1.1/config/Xstartup.cpp	2006-11-15 08:45:34.609505000 +0000
+@@ -2,4 +2,4 @@
+ XCOMM Register a login (derived from GiveConsole as follows:)
+ XCOMM
+ BINDIR/sessreg  -a -w "/var/log/wtmp" -u "/var/run/utmp" \
+-	-x "XDMCONFIGDIR/Xservers" -l $DISPLAY -h "" $USER
++	-x XDMCONFIGDIR/Xservers -l $DISPLAY -h "" $USER
 --- xdm-1.1.0/config/Xresources.cpp.orig	2006-08-14 20:12:34.000000000 +0200
 +++ xdm-1.1.0/config/Xresources.cpp	2006-10-15 02:18:19.860305500 +0200
 @@ -78,7 +78,7 @@

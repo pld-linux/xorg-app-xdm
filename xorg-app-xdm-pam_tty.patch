@@ -1,14 +1,14 @@
---- xdm-1.1.0/greeter/greet.c.orig	2006-08-14 20:00:05.000000000 +0200
-+++ xdm-1.1.0/greeter/greet.c	2006-10-15 01:18:00.810129000 +0200
-@@ -541,6 +541,11 @@
+Set PAM_TTY for remote displays too (used e.g. by pam_time)
+--- xdm-1.1.1/greeter/greet.c.orig	2006-10-19 01:55:50.000000000 +0000
++++ xdm-1.1.1/greeter/greet.c	2006-11-15 08:39:41.739505000 +0000
+@@ -540,8 +540,8 @@
+ 					(*pamhp, PAM_RHOST, hostname));
  		free(hostname);
  	    }
- 	}
-+	/* "for graphical, X-based, applications the value for this
-+	 * item should be the $DISPLAY variable." (pam_appl docs)
-+	 */
-+	RUN_AND_CHECK_PAM_ERROR(pam_set_item,
-+				(*pamhp, PAM_TTY, d->name));
+-	} else
+-	    RUN_AND_CHECK_PAM_ERROR(pam_set_item, (*pamhp, PAM_TTY, d->name));
++	}
++	RUN_AND_CHECK_PAM_ERROR(pam_set_item, (*pamhp, PAM_TTY, d->name));
   
  	if (!greet->allow_null_passwd) {
  	    pam_flags |= PAM_DISALLOW_NULL_AUTHTOK;
