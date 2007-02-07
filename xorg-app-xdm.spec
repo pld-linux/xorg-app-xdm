@@ -1,3 +1,6 @@
+# TODO
+# - Source1 contains X11R6 paths and the scripts inside should be reviewed for
+#   security issues
 Summary:	xdm - X Display Manager with support for XDMCP, host chooser
 Summary(pl):	XDM - zarz±dca ekranów z obs³ug± XDMCP i wybieraniem hostów
 Summary(ru):	íÅÎÅÄÖÅÒ ÄÉÓĞÌÅÑ X
