@@ -2,9 +2,9 @@
 # - Source1 contains X11R6 paths and the scripts inside should be reviewed for
 #   security issues
 Summary:	xdm - X Display Manager with support for XDMCP, host chooser
-Summary(pl):	XDM - zarz±dca ekranów z obs³ug± XDMCP i wybieraniem hostów
-Summary(ru):	íÅÎÅÄÖÅÒ ÄÉÓĞÌÅÑ X
-Summary(uk):	íÅÎÅÄÖÅÒ ÄÉÓĞÌÅÀ X
+Summary(pl.UTF-8):   XDM - zarzÄ…dca ekranÃ³w z obsÅ‚ugÄ… XDMCP i wybieraniem hostÃ³w
+Summary(ru.UTF-8):   ĞœĞµĞ½ĞµĞ´Ğ¶ĞµÑ€ Ğ´Ğ¸ÑĞ¿Ğ»ĞµÑ X
+Summary(uk.UTF-8):   ĞœĞµĞ½ĞµĞ´Ğ¶ĞµÑ€ Ğ´Ğ¸ÑĞ¿Ğ»ĞµÑ X
 Name:		xorg-app-xdm
 Version:	1.1.4
 Release:	2
@@ -64,16 +64,16 @@ or remote servers. The design of xdm was guided by the needs of X
 terminals as well as the X Consortium standard XDMCP, the X Display
 Manager Control Protocol.
 
-%description -l pl
-Xdm zarz±dza zestawem ekranów X, które mog± byæ lokalne lub na
-zdalnych serwerach. Zosta³ zaprojektowany zgodnie z potrzebami X
+%description -l pl.UTF-8
+Xdm zarzÄ…dza zestawem ekranÃ³w X, ktÃ³re mogÄ… byÄ‡ lokalne lub na
+zdalnych serwerach. ZostaÅ‚ zaprojektowany zgodnie z potrzebami X
 terminali oraz standardem X Consortium XDMCP.
 
-%description -l ru
-íÅÎÅÄÖÅÒ ÄÉÓĞÌÅÑ X.
+%description -l ru.UTF-8
+ĞœĞµĞ½ĞµĞ´Ğ¶ĞµÑ€ Ğ´Ğ¸ÑĞ¿Ğ»ĞµÑ X.
 
-%description -l uk
-íÅÎÅÄÖÅÒ ÄÉÓĞÌÅÀ X.
+%description -l uk.UTF-8
+ĞœĞµĞ½ĞµĞ´Ğ¶ĞµÑ€ Ğ´Ğ¸ÑĞ¿Ğ»ĞµÑ X.
 
 %prep
 %setup -q -n xdm-%{version} -a1
