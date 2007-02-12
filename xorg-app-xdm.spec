@@ -2,9 +2,9 @@
 # - Source1 contains X11R6 paths and the scripts inside should be reviewed for
 #   security issues
 Summary:	xdm - X Display Manager with support for XDMCP, host chooser
-Summary(pl.UTF-8):   XDM - zarządca ekranów z obsługą XDMCP i wybieraniem hostów
-Summary(ru.UTF-8):   Менеджер дисплея X
-Summary(uk.UTF-8):   Менеджер дисплею X
+Summary(pl.UTF-8):	XDM - zarządca ekranów z obsługą XDMCP i wybieraniem hostów
+Summary(ru.UTF-8):	Менеджер дисплея X
+Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.4
 Release:	2
