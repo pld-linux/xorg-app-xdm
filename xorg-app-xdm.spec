@@ -7,7 +7,7 @@ Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.4
-Release:	2
+Release:	3
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -51,10 +51,6 @@ Provides:	XDM
 Provides:	xdm = %{version}-%{release}
 Obsoletes:	X11-xdm < 1:7.0.0
 Obsoletes:	XFree86-xdm < 1:7.0.0
-Obsoletes:	entrance
-Obsoletes:	gdm
-Obsoletes:	kdm
-Obsoletes:	wdm
 Obsoletes:	xdm < 1:7.0.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
