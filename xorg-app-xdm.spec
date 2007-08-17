@@ -6,12 +6,12 @@ Summary(pl.UTF-8):	XDM - zarządca ekranów z obsługą XDMCP i wybieraniem host
 Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
-Version:	1.1.5
+Version:	1.1.6
 Release:	1
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
-# Source0-md5:	99ba64a6af8e7e5735bf2a35c2351164
+# Source0-md5:	c89f8bc74fda4d19e5f374f59c88810f
 Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
 # Source1-md5:	0a15b1c374256b5cad7961807baa3896
 Source2:	xdm.pamd
