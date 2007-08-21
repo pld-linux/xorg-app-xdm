@@ -137,7 +137,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc COPYING ChangeLog
+%doc AUTHORS COPYING ChangeLog README
 %attr(755,root,root) %{_bindir}/xdm
 %attr(755,root,root) %{_bindir}/xdmshell
 %{_datadir}/X11/app-defaults/Chooser
