@@ -6,12 +6,12 @@ Summary(pl.UTF-8):	XDM - zarządca ekranów z obsługą XDMCP i wybieraniem host
 Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
-Version:	1.1.8
-Release:	3
+Version:	1.1.9
+Release:	1
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
-# Source0-md5:	cc1816bc62a3722ad509373b0b7f30fe
+# Source0-md5:	030ae4bd9b8d428749d68bfdf56ce8a5
 Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
 # Source1-md5:	0a15b1c374256b5cad7961807baa3896
 Source2:	xdm.pamd
@@ -20,7 +20,6 @@ Source4:	xdm.sysconfig
 Patch0:		%{name}-Xsession.patch
 Patch1:		%{name}-pam_tty.patch
 Patch2:		%{name}-config.patch
-Patch3:		%{name}-xaw.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
@@ -77,7 +76,6 @@ terminali oraz standardem X Consortium XDMCP.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %build
 %{__libtoolize}
@@ -93,7 +91,7 @@ terminali oraz standardem X Consortium XDMCP.
 	--with-color-pixmap=xdm-pld-logo.xpm \
 	--with-default-vt=vt9 \
 	--with-pixmapdir=%{_sysconfdir}/X11/xdm/pixmaps \
-	--with-xdmauthdir=/var/lib/xdm \
+	--with-authdir=/var/lib/xdm \
 	--with-xdmconfigdir=%{_sysconfdir}/X11/xdm \
 	--with-xdmscriptdir=%{_sysconfdir}/X11/xdm
 
