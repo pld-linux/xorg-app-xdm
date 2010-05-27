@@ -6,12 +6,12 @@ Summary(pl.UTF-8):	XDM - zarządca ekranów z obsługą XDMCP i wybieraniem host
 Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
-Version:	1.1.9
+Version:	1.1.10
 Release:	1
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
-# Source0-md5:	030ae4bd9b8d428749d68bfdf56ce8a5
+# Source0-md5:	329383040cdbda5b5c8ce6c7e1120c97
 Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
 # Source1-md5:	0a15b1c374256b5cad7961807baa3896
 Source2:	xdm.pamd
@@ -20,10 +20,12 @@ Source4:	xdm.sysconfig
 Patch0:		%{name}-Xsession.patch
 Patch1:		%{name}-pam_tty.patch
 Patch2:		%{name}-config.patch
+Patch3:		%{name}-selinux.patch
 URL:		http://xorg.freedesktop.org/
-BuildRequires:	autoconf >= 2.57
+BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
 BuildRequires:	cpp
+BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig >= 1:0.19
@@ -36,7 +38,7 @@ BuildRequires:	xorg-lib-libXmu-devel
 BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-xtrans-devel
-BuildRequires:	xorg-util-util-macros >= 1.3
+BuildRequires:	xorg-util-util-macros >= 1.4
 Requires(post,preun):	/sbin/chkconfig
 Requires:	mktemp
 Requires:	pam >= 0.99.7.1
@@ -76,10 +78,11 @@ terminali oraz standardem X Consortium XDMCP.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -87,11 +90,12 @@ terminali oraz standardem X Consortium XDMCP.
 	DEF_SYSTEM_PATH="/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin" \
 	DEF_USER_PATH="/usr/local/bin:/usr/bin:/bin" \
 	--disable-static \
+	--with-authdir=/var/lib/xdm \
 	--with-bw-pixmap=xdm-pld-logo-bw.xpm \
 	--with-color-pixmap=xdm-pld-logo.xpm \
 	--with-default-vt=vt9 \
 	--with-pixmapdir=%{_sysconfdir}/X11/xdm/pixmaps \
-	--with-authdir=/var/lib/xdm \
+	--with-selinux \
 	--with-xdmconfigdir=%{_sysconfdir}/X11/xdm \
 	--with-xdmscriptdir=%{_sysconfdir}/X11/xdm
 
