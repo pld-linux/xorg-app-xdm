@@ -1,0 +1,20 @@
+--- xdm-1.1.10/configure.ac.orig	2010-04-10 03:49:03.000000000 +0200
++++ xdm-1.1.10/configure.ac	2010-05-27 08:38:08.765531633 +0200
+@@ -144,7 +144,7 @@
+ 		[if test "x$USE_SELINUX" != "xtry" ; then
+ 			AC_MSG_ERROR(["selinux support requested, but is_selinux_enabled not found."])
+ 		 fi])
+-	XDM_LIBS="$XDM_LIBS $LIBS"
++	XDM_SELINUX_LIBS="$LIBS"
+ 	LIBS="$old_LIBS"
+ fi
+ 
+@@ -311,7 +311,7 @@
+ 
+ PKG_CHECK_MODULES(XDM, xmu x11 xau)
+ 
+-XDM_LIBS="$XDM_LIBS $XDM_OS_LIBS"
++XDM_LIBS="$XDM_LIBS $XDM_SELINUX_LIBS $XDM_OS_LIBS"
+ 
+ PKG_CHECK_EXISTS(xinerama, [
+ 	AC_DEFINE([USE_XINERAMA], 1, 
