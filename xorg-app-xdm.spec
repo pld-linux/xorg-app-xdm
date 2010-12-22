@@ -20,8 +20,10 @@ Source4:	xdm.sysconfig
 Patch0:		%{name}-Xsession.patch
 Patch1:		%{name}-pam_tty.patch
 Patch2:		%{name}-config.patch
-Patch3:		%{name}-selinux.patch
+Patch3:		%{name}-consolekit.patch
+Patch4:		%{name}-selinux.patch
 URL:		http://xorg.freedesktop.org/
+BuildRequires:	ConsoleKit-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
 BuildRequires:	cpp
@@ -79,6 +81,7 @@ terminali oraz standardem X Consortium XDMCP.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -93,6 +96,7 @@ terminali oraz standardem X Consortium XDMCP.
 	--with-authdir=/var/lib/xdm \
 	--with-bw-pixmap=xdm-pld-logo-bw.xpm \
 	--with-color-pixmap=xdm-pld-logo.xpm \
+	--with-consolekit \
 	--with-default-vt=vt9 \
 	--with-pixmapdir=%{_sysconfdir}/X11/xdm/pixmaps \
 	--with-selinux \
