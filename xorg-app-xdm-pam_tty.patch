@@ -1,13 +1,16 @@
 Set PAM_TTY for remote displays too (used e.g. by pam_time)
---- xdm-1.1.1/greeter/greet.c.orig	2006-10-19 01:55:50.000000000 +0000
-+++ xdm-1.1.1/greeter/greet.c	2006-11-15 08:39:41.739505000 +0000
-@@ -545,8 +545,7 @@
+--- xdm-1.1.11/greeter/greet.c.orig	2011-09-25 09:35:47.000000000 +0200
++++ xdm-1.1.11/greeter/greet.c	2011-09-26 16:43:55.211132926 +0200
+@@ -535,6 +535,12 @@
  					(*pamhp, PAM_RHOST, hostname));
  		free(hostname);
  	    }
--	} else
--	    RUN_AND_CHECK_PAM_ERROR(pam_set_item, (*pamhp, PAM_TTY, d->name));
-+	}
++
++	    /* "for graphical, X-based, applications the value for this
++	     * item should be the $DISPLAY variable." (pam_appl docs)
++	     */
++	    RUN_AND_CHECK_PAM_ERROR(pam_set_item,
++				    (*pamhp, PAM_TTY, d->name));
+ 	} else {			/* Displaying on local host */
+ 	    const char *ttyname = NULL;
  
- 	if (!greet->allow_null_passwd) {
- 	    pam_flags |= PAM_DISALLOW_NULL_AUTHTOK;

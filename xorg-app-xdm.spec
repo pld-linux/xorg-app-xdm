@@ -6,12 +6,12 @@ Summary(pl.UTF-8):	XDM - zarządca ekranów z obsługą XDMCP i wybieraniem host
 Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
-Version:	1.1.10
+Version:	1.1.11
 Release:	1
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
-# Source0-md5:	329383040cdbda5b5c8ce6c7e1120c97
+# Source0-md5:	64a1af1f7eb69feae12e75d4cc3aaf19
 Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
 # Source1-md5:	0a15b1c374256b5cad7961807baa3896
 Source2:	xdm.pamd
@@ -21,7 +21,6 @@ Patch0:		%{name}-Xsession.patch
 Patch1:		%{name}-pam_tty.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-consolekit.patch
-Patch4:		%{name}-selinux.patch
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	ConsoleKit-devel
 BuildRequires:	autoconf >= 2.60
@@ -31,16 +30,18 @@ BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig >= 1:0.19
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
+BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXmu-devel
 BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-xtrans-devel
-BuildRequires:	xorg-util-util-macros >= 1.4
+BuildRequires:	xorg-util-util-macros >= 1.8
 Requires(post,preun):	/sbin/chkconfig
 Requires:	mktemp
 Requires:	pam >= 0.99.7.1
@@ -81,7 +82,6 @@ terminali oraz standardem X Consortium XDMCP.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -93,6 +93,7 @@ terminali oraz standardem X Consortium XDMCP.
 	DEF_SYSTEM_PATH="/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin" \
 	DEF_USER_PATH="/usr/local/bin:/usr/bin:/bin" \
 	--disable-static \
+	--enable-xdmshell \
 	--with-authdir=/var/lib/xdm \
 	--with-bw-pixmap=xdm-pld-logo-bw.xpm \
 	--with-color-pixmap=xdm-pld-logo.xpm \
@@ -113,10 +114,10 @@ install -d $RPM_BUILD_ROOT/var/lib/xdm
 	DESTDIR=$RPM_BUILD_ROOT \
 	appdefaultdir=%{_datadir}/X11/app-defaults
 
-rm -f $RPM_BUILD_ROOT%{_libdir}/X11/xdm/libXdmGreet.la
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/X11/xdm/libXdmGreet.la
 
 # set up PLD xdm config
-rm -f $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm/{*Console,Xaccess,Xsession,Xsetup*}
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm/{*Console,Xaccess,Xsession,Xsetup*}
 install xdm-xinitrc-*/pixmaps/* $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm/pixmaps
 install xdm-xinitrc-*/{*Console,Xaccess,Xsession,Xsetup*} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm
 
@@ -175,3 +176,4 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/xdm
 %dir /var/lib/xdm
 %{_mandir}/man1/xdm.1x*
+%{_mandir}/man1/xdmshell.1x*
