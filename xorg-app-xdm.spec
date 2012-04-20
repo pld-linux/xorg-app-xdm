@@ -7,7 +7,7 @@ Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.11
-Release:	1
+Release:	2
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -30,6 +30,7 @@ BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig >= 1:0.19
+BuildRequires:	rpmbuild(macros) >= 1.627
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXaw-devel
@@ -46,11 +47,13 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	mktemp
 Requires:	pam >= 0.99.7.1
 Requires:	rc-scripts
+Requires:	xorg-app-sessreg
 Requires:	xorg-app-xconsole
 Requires:	xorg-app-xrdb
 Requires:	xorg-app-xsetroot
-Requires:	xorg-app-sessreg
 Requires:	xorg-lib-libXt >= 1.0.0
+Requires(post,preun,postun):	systemd-units >= 38
+Requires:	systemd-units >= 38
 Requires:	xterm
 Provides:	XDM
 Provides:	xdm = %{version}-%{release}
@@ -108,7 +111,8 @@ terminali oraz standardem X Consortium XDMCP.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/var/lib/xdm
+install -d $RPM_BUILD_ROOT/var/lib/xdm \
+	$RPM_BUILD_ROOT%{systemdunitdir}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -121,9 +125,10 @@ install -d $RPM_BUILD_ROOT/var/lib/xdm
 install xdm-xinitrc-*/pixmaps/* $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm/pixmaps
 install xdm-xinitrc-*/{*Console,Xaccess,Xsession,Xsetup*} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xdm
 
-install -D %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xdm
-install -D %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/xdm
-install -D %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/xdm
+install -Dp %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xdm
+install -Dp %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/xdm
+install -Dp %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/xdm
+ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
 install -d $RPM_BUILD_ROOT/etc/security
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xdm
 
@@ -132,18 +137,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add xdm
-if [ -f /var/lock/subsys/xdm ]; then
-	echo "Run \"/sbin/service xdm restart\" to restart xdm." >&2
-	echo "WARNING: it will terminate all sessions opened from xdm!" >&2
-else
-	echo "Run \"/sbin/service xdm start\" to start xdm." >&2
-fi
+# -n skips restarting as it would otherise terminate all sessions opened from xdm!
+%service -n xdm restart
+%systemd_reload
 
 %preun
 if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del xdm
 	%service xdm stop
 fi
+
+%postun
+%systemd_reload
 
 %files
 %defattr(644,root,root,755)
