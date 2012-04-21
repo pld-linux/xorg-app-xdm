@@ -7,7 +7,7 @@ Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.11
-Release:	3
+Release:	4
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -43,6 +43,7 @@ BuildRequires:	xorg-lib-libXpm-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-util-util-macros >= 1.8
+BuildRequires:	systemd-units >= 38
 Requires(post,preun):	/sbin/chkconfig
 Requires:	mktemp
 Requires:	pam >= 0.99.7.1
@@ -128,7 +129,7 @@ install xdm-xinitrc-*/{*Console,Xaccess,Xsession,Xsetup*} $RPM_BUILD_ROOT%{_sysc
 install -Dp %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xdm
 install -Dp %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/xdm
 install -Dp %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/xdm
-ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/xdm.service
+ln -sf /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/xdm.service
 install -d $RPM_BUILD_ROOT/etc/security
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xdm
 
