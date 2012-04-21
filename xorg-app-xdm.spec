@@ -7,7 +7,7 @@ Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.11
-Release:	2
+Release:	3
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -128,7 +128,7 @@ install xdm-xinitrc-*/{*Console,Xaccess,Xsession,Xsetup*} $RPM_BUILD_ROOT%{_sysc
 install -Dp %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xdm
 install -Dp %{SOURCE3} $RPM_BUILD_ROOT/etc/rc.d/init.d/xdm
 install -Dp %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/xdm
-ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
+ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/xdm.service
 install -d $RPM_BUILD_ROOT/etc/security
 :> $RPM_BUILD_ROOT/etc/security/blacklist.xdm
 
@@ -178,6 +178,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/xdm
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.xdm
 %attr(754,root,root) /etc/rc.d/init.d/xdm
+%{systemdunitdir}/xdm.service
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/xdm
 %dir /var/lib/xdm
 %{_mandir}/man1/xdm.1x*
