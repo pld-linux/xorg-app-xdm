@@ -7,7 +7,7 @@ Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.11
-Release:	4
+Release:	5
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
@@ -182,5 +182,5 @@ fi
 %{systemdunitdir}/xdm.service
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/xdm
 %dir /var/lib/xdm
-%{_mandir}/man1/xdm.1x*
-%{_mandir}/man1/xdmshell.1x*
+%{_mandir}/man1/xdm.1*
+%{_mandir}/man1/xdmshell.1*
