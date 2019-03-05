@@ -31,9 +31,9 @@ Index: xdm-1.1.10/configure.ac
  #
  #  XDM
  #
---- xdm-1.1.11.orig/xdm/session.c
-+++ xdm-1.1.11/xdm/session.c
-@@ -67,6 +67,11 @@ extern int key_setnet(struct key_netstar
+--- xdm-1.1.12/xdm/session.c.orig	2019-03-02 23:06:13.000000000 +0100
++++ xdm-1.1.12/xdm/session.c	2019-03-05 18:55:19.964592706 +0100
+@@ -73,6 +73,11 @@ extern int key_setnet(struct key_netstar
  # endif
  #endif /* USE_PAM */
  
@@ -42,10 +42,10 @@ Index: xdm-1.1.10/configure.ac
 +#include <dbus/dbus.h>
 +#endif
 +
- #ifdef __SCO__
- # include <prot.h>
- #endif
-@@ -514,6 +519,97 @@ UnsecureDisplay (struct display *d, Disp
+ #ifdef USE_SELINUX
+ #include <selinux/selinux.h>
+ #include <selinux/get_context_list.h>
+@@ -523,6 +528,97 @@ UnsecureDisplay (struct display *d, Disp
      }
  }
  
@@ -143,7 +143,7 @@ Index: xdm-1.1.10/configure.ac
  void
  SessionExit (struct display *d, int status, int removeAuth)
  {
-@@ -528,6 +624,8 @@ SessionExit (struct display *d, int stat
+@@ -537,6 +633,8 @@ SessionExit (struct display *d, int stat
      }
  #endif
  
@@ -152,7 +152,7 @@ Index: xdm-1.1.10/configure.ac
      /* make sure the server gets reset after the session is over */
      if (d->serverPid >= 2 && d->resetSignal)
  	kill (d->serverPid, d->resetSignal);
-@@ -610,6 +708,10 @@ StartClient (
+@@ -614,6 +712,10 @@ StartClient (
  #ifdef USE_PAM
      if (pamh) pam_open_session(pamh, 0);
  #endif

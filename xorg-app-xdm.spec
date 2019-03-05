@@ -6,12 +6,12 @@ Summary(pl.UTF-8):	XDM - zarządca ekranów z obsługą XDMCP i wybieraniem host
 Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
-Version:	1.1.11
-Release:	5
+Version:	1.1.12
+Release:	1
 License:	MIT
 Group:		X11/Applications
-Source0:	http://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
-# Source0-md5:	64a1af1f7eb69feae12e75d4cc3aaf19
+Source0:	https://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.bz2
+# Source0-md5:	47c4c3bf8d59b64b64d134df8b5e5ec5
 Source1:	ftp://ftp.pld-linux.org/software/xinit/xdm-xinitrc-0.2.tar.bz2
 # Source1-md5:	0a15b1c374256b5cad7961807baa3896
 Source2:	xdm.pamd
@@ -21,11 +21,12 @@ Patch0:		%{name}-Xsession.patch
 Patch1:		%{name}-pam_tty.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-consolekit.patch
-URL:		http://xorg.freedesktop.org/
+URL:		https://xorg.freedesktop.org/
 BuildRequires:	ConsoleKit-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
 BuildRequires:	cpp
+BuildRequires:	libbsd-devel
 BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pam-devel
@@ -40,10 +41,14 @@ BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXmu-devel
 BuildRequires:	xorg-lib-libXpm-devel
+BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-xtrans-devel
+BuildRequires:	xorg-proto-xproto-devel >= 7.0.17
 BuildRequires:	xorg-util-util-macros >= 1.8
 BuildRequires:	systemd-units >= 38
+#libsystemd-daemon for startup notification
+#BuildRequires:	systemd-devel < 1:209
 Requires(post,preun):	/sbin/chkconfig
 Requires:	mktemp
 Requires:	pam >= 0.99.7.1
@@ -153,7 +158,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog README
+%doc AUTHORS COPYING ChangeLog README.md
 %attr(755,root,root) %{_bindir}/xdm
 %attr(755,root,root) %{_bindir}/xdmshell
 %{_datadir}/X11/app-defaults/Chooser
@@ -182,5 +187,5 @@ fi
 %{systemdunitdir}/xdm.service
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/xdm
 %dir /var/lib/xdm
-%{_mandir}/man1/xdm.1*
-%{_mandir}/man1/xdmshell.1*
+%{_mandir}/man8/xdm.8*
+%{_mandir}/man8/xdmshell.8*

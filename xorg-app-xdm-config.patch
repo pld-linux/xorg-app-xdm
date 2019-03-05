@@ -1,5 +1,5 @@
---- xdm-1.1.0/config/Xresources.cpp.orig	2006-08-14 20:12:34.000000000 +0200
-+++ xdm-1.1.0/config/Xresources.cpp	2006-10-15 02:18:19.860305500 +0200
+--- xdm-1.1.12/config/Xresources.in.orig	2006-08-14 20:12:34.000000000 +0200
++++ xdm-1.1.12/config/Xresources.in	2006-10-15 02:18:19.860305500 +0200
 @@ -78,7 +78,7 @@
  #endif /* XPM */
  XHASHendif
