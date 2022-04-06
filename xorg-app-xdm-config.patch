@@ -1,7 +1,8 @@
---- xdm-1.1.12/config/Xresources.in.orig	2006-08-14 20:12:34.000000000 +0200
-+++ xdm-1.1.12/config/Xresources.in	2006-10-15 02:18:19.860305500 +0200
-@@ -78,7 +78,7 @@
- #endif /* XPM */
+diff -urNp -x '*.orig' xdm-1.1.12.org/config/Xresources.in xdm-1.1.12/config/Xresources.in
+--- xdm-1.1.12.org/config/Xresources.in	2019-03-02 22:06:13.000000000 +0000
++++ xdm-1.1.12/config/Xresources.in	2022-04-06 18:24:57.852216768 +0000
+@@ -58,7 +58,7 @@ xlogin*shdColor: black
+ xlogin*hiColor: black
  XHASHendif
  #ifdef XPM
 -XHASHif PLANES >= 8
@@ -9,20 +10,21 @@
  xlogin*logoFileName: BITMAPDIR/**//XDM_PIXMAP
  XHASHelse
  xlogin*logoFileName: BITMAPDIR/**//XDM_BWPIXMAP
---- xdm-1.1.0/xdm-xinitrc-0.2/GiveConsole.orig	2000-10-29 20:59:44.000000000 +0100
-+++ xdm-1.1.0/xdm-xinitrc-0.2/GiveConsole	2006-10-15 02:18:00.359086750 +0200
+diff -urNp -x '*.orig' xdm-1.1.12.org/xdm-xinitrc-0.2/GiveConsole xdm-1.1.12/xdm-xinitrc-0.2/GiveConsole
+--- xdm-1.1.12.org/xdm-xinitrc-0.2/GiveConsole	2000-10-29 19:59:44.000000000 +0000
++++ xdm-1.1.12/xdm-xinitrc-0.2/GiveConsole	2022-04-06 18:24:57.852216768 +0000
 @@ -8,4 +8,4 @@
  # causing serious grief.
  #
  chown $USER /dev/console
 -/usr/X11R6/bin/sessreg  -a -x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
 +/usr/bin/sessreg  -a -x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
---- xdm-1.1.0/xdm-xinitrc-0.2/TakeConsole.orig	2000-10-29 20:59:44.000000000 +0100
-+++ xdm-1.1.0/xdm-xinitrc-0.2/TakeConsole	2006-10-15 02:18:07.591538750 +0200
+diff -urNp -x '*.orig' xdm-1.1.12.org/xdm-xinitrc-0.2/TakeConsole xdm-1.1.12/xdm-xinitrc-0.2/TakeConsole
+--- xdm-1.1.12.org/xdm-xinitrc-0.2/TakeConsole	2000-10-29 19:59:44.000000000 +0000
++++ xdm-1.1.12/xdm-xinitrc-0.2/TakeConsole	2022-04-06 18:24:57.852216768 +0000
 @@ -5,4 +5,4 @@
  #
  chmod 622 /dev/console
  chown root /dev/console
 -/usr/X11R6/bin/sessreg -d -x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
 +/usr/bin/sessreg -d -x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER
-

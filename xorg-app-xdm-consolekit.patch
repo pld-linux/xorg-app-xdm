@@ -8,11 +8,12 @@
 
 Index: xdm-1.1.10/configure.ac
 ===================================================================
---- xdm-1.1.10.orig/configure.ac
-+++ xdm-1.1.10/configure.ac
-@@ -434,6 +434,20 @@ fi
- 
- AM_CONDITIONAL(DYNAMIC_GREETER, test x$DYNAMIC_GREETER = xyes)
+diff -urNp -x '*.orig' xdm-1.1.12.org/configure.ac xdm-1.1.12/configure.ac
+--- xdm-1.1.12.org/configure.ac	2019-03-02 22:06:13.000000000 +0000
++++ xdm-1.1.12/configure.ac	2022-04-06 18:25:09.812244306 +0000
+@@ -429,6 +429,20 @@ AM_CONDITIONAL(HAS_XDM_AUTH, test x$xdma
+ AC_SUBST(XDM_CFLAGS)
+ AC_SUBST(XDM_LIBS)
  
 +# ConsoleKit support
 +AC_ARG_WITH(consolekit, AC_HELP_STRING([--with-consolekit], [Use ConsoleKit]),
@@ -29,10 +30,84 @@ Index: xdm-1.1.10/configure.ac
 +dnl AM_CONDITIONAL(USE_CONSOLEKIT, test$USE_CONSOLEKIT = xyes)
 +
  #
- #  XDM
+ # xdmshell
  #
---- xdm-1.1.12/xdm/session.c.orig	2019-03-02 23:06:13.000000000 +0100
-+++ xdm-1.1.12/xdm/session.c	2019-03-05 18:55:19.964592706 +0100
+diff -urNp -x '*.orig' xdm-1.1.12.org/include/dm.h xdm-1.1.12/include/dm.h
+--- xdm-1.1.12.org/include/dm.h	2019-03-02 22:06:13.000000000 +0000
++++ xdm-1.1.12/include/dm.h	2022-04-06 18:25:09.813244308 +0000
+@@ -327,6 +327,9 @@ extern char	*randomFile;
+ extern char	*prngdSocket;
+ extern int	prngdPort;
+ # endif
++#ifdef USE_CONSOLEKIT
++extern int	use_consolekit;
++#endif
+ 
+ extern char	*greeterLib;
+ extern char	*willing;
+diff -urNp -x '*.orig' xdm-1.1.12.org/man/xdm.man xdm-1.1.12/man/xdm.man
+--- xdm-1.1.12.org/man/xdm.man	2019-03-02 22:06:13.000000000 +0000
++++ xdm-1.1.12/man/xdm.man	2022-04-06 18:25:09.813244308 +0000
+@@ -48,6 +48,8 @@ xdm \- X Display Manager with support fo
+ ] [
+ .B \-session
+ .I session_program
++] [
++.B \-noconsolekit
+ ]
+ .SH DESCRIPTION
+ .I Xdm
+@@ -215,6 +217,10 @@ indicates the program to run as the sess
+ .IP "\fB\-xrm\fP \fIresource_specification\fP"
+ Allows an arbitrary resource to be specified, as in most
+ X Toolkit applications.
++.IP "\fB\-noconsolekit\fP"
++Specifies ``false'' as the value for the \fBDisplayManager.consoleKit\fP
++resource.
++This suppresses the session management using ConsoleKit.
+ .SH RESOURCES
+ At many stages the actions of
+ .I xdm
+diff -urNp -x '*.orig' xdm-1.1.12.org/xdm/resource.c xdm-1.1.12/xdm/resource.c
+--- xdm-1.1.12.org/xdm/resource.c	2019-03-02 22:06:13.000000000 +0000
++++ xdm-1.1.12/xdm/resource.c	2022-04-06 18:25:09.813244308 +0000
+@@ -65,6 +65,9 @@ char	*randomDevice;
+ char	*prngdSocket;
+ int	prngdPort;
+ #endif
++#ifdef USE_CONSOLEKIT
++int	use_consolekit;
++#endif
+ 
+ char	*greeterLib;
+ char	*willing;
+@@ -192,6 +195,10 @@ struct dmResources {
+ 				"false"} ,
+ { "willing",	"Willing",	DM_STRING,	&willing,
+ 				""} ,
++#ifdef USE_CONSOLEKIT
++{ "consoleKit",	"ConsoleKit",	DM_BOOL,	(char **) &use_consolekit,
++				"true"} ,
++#endif
+ };
+ 
+ #define NUM_DM_RESOURCES	(sizeof DmResources / sizeof DmResources[0])
+@@ -377,7 +384,11 @@ XrmOptionDescRec optionTable [] = {
+ {"-debug",	"*debugLevel",		XrmoptionSepArg,	(caddr_t) NULL },
+ {"-xrm",	NULL,			XrmoptionResArg,	(caddr_t) NULL },
+ {"-daemon",	".daemonMode",		XrmoptionNoArg,		"true"         },
+-{"-nodaemon",	".daemonMode",		XrmoptionNoArg,		"false"        }
++{"-nodaemon",	".daemonMode",		XrmoptionNoArg,		"false"        },
++#ifdef USE_CONSOLEKIT
++{"-consolekit",	".consoleKit",		XrmoptionNoArg,		"true"  },
++{"-noconsolekit", ".consoleKit",	XrmoptionNoArg,		"false" }
++#endif
+ };
+ 
+ static int	originalArgc;
+diff -urNp -x '*.orig' xdm-1.1.12.org/xdm/session.c xdm-1.1.12/xdm/session.c
+--- xdm-1.1.12.org/xdm/session.c	2019-03-02 22:06:13.000000000 +0000
++++ xdm-1.1.12/xdm/session.c	2022-04-06 18:25:09.812244306 +0000
 @@ -73,6 +73,11 @@ extern int key_setnet(struct key_netstar
  # endif
  #endif /* USE_PAM */
@@ -163,73 +238,3 @@ Index: xdm-1.1.10/configure.ac
      switch (pid = fork ()) {
      case 0:
  	CleanUpChild ();
---- xdm-1.1.11.orig/include/dm.h
-+++ xdm-1.1.11/include/dm.h
-@@ -323,6 +323,9 @@ extern char	*randomFile;
- extern char	*prngdSocket;
- extern int	prngdPort;
- # endif
-+#ifdef USE_CONSOLEKIT
-+extern int	use_consolekit;
-+#endif
- 
- extern char	*greeterLib;
- extern char	*willing;
---- xdm-1.1.11.orig/xdm/resource.c
-+++ xdm-1.1.11/xdm/resource.c
-@@ -65,6 +65,9 @@ char	*randomDevice;
- char	*prngdSocket;
- int	prngdPort;
- #endif
-+#ifdef USE_CONSOLEKIT
-+int	use_consolekit;
-+#endif
- 
- char	*greeterLib;
- char	*willing;
-@@ -196,6 +199,10 @@ struct dmResources {
- 				"false"} ,
- { "willing",	"Willing",	DM_STRING,	&willing,
- 				""} ,
-+#ifdef USE_CONSOLEKIT
-+{ "consoleKit",	"ConsoleKit",	DM_BOOL,	(char **) &use_consolekit,
-+				"true"} ,
-+#endif
- };
- 
- #define NUM_DM_RESOURCES	(sizeof DmResources / sizeof DmResources[0])
-@@ -378,7 +385,11 @@ XrmOptionDescRec optionTable [] = {
- {"-debug",	"*debugLevel",		XrmoptionSepArg,	(caddr_t) NULL },
- {"-xrm",	NULL,			XrmoptionResArg,	(caddr_t) NULL },
- {"-daemon",	".daemonMode",		XrmoptionNoArg,		"true"         },
--{"-nodaemon",	".daemonMode",		XrmoptionNoArg,		"false"        }
-+{"-nodaemon",	".daemonMode",		XrmoptionNoArg,		"false"        },
-+#ifdef USE_CONSOLEKIT
-+{"-consolekit",	".consoleKit",		XrmoptionNoArg,		"true"  },
-+{"-noconsolekit", ".consoleKit",	XrmoptionNoArg,		"false" }
-+#endif
- };
- 
- static int	originalArgc;
---- xdm-1.1.10.orig/man/xdm.man
-+++ xdm-1.1.10/man/xdm.man
-@@ -48,6 +48,8 @@ xdm \- X Display Manager with support fo
- ] [
- .B \-session
- .I session_program
-+] [
-+.B \-noconsolekit
- ]
- .SH DESCRIPTION
- .I Xdm
-@@ -215,6 +217,10 @@ indicates the program to run as the sess
- .IP "\fB\-xrm\fP \fIresource_specification\fP"
- Allows an arbitrary resource to be specified, as in most
- X Toolkit applications.
-+.IP "\fB\-noconsolekit\fP"
-+Specifies ``false'' as the value for the \fBDisplayManager.consoleKit\fP
-+resource.
-+This suppresses the session management using ConsoleKit.
- .SH RESOURCES
- At many stages the actions of
- .I xdm
