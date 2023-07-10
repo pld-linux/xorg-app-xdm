@@ -1,13 +1,14 @@
 # TODO
 # - Source1 contains X11R6 paths and the scripts inside should be reviewed for
 #   security issues
+%bcond_without	systemd		# systemd
 Summary:	xdm - X Display Manager with support for XDMCP, host chooser
 Summary(pl.UTF-8):	XDM - zarządca ekranów z obsługą XDMCP i wybieraniem hostów
 Summary(ru.UTF-8):	Менеджер дисплея X
 Summary(uk.UTF-8):	Менеджер дисплею X
 Name:		xorg-app-xdm
 Version:	1.1.14
-Release:	2
+Release:	3
 License:	MIT
 Group:		X11/Applications
 Source0:	https://xorg.freedesktop.org/releases/individual/app/xdm-%{version}.tar.xz
@@ -47,7 +48,7 @@ BuildRequires:	xorg-lib-libXt-devel >= 1.0.0
 BuildRequires:	xorg-lib-xtrans-devel
 BuildRequires:	xorg-proto-xproto-devel >= 7.0.17
 BuildRequires:	xorg-util-util-macros >= 1.8
-BuildRequires:	systemd-devel >= 1:209
+%{?with_systemd:BuildRequires:	systemd-devel >= 1:209}
 BuildRequires:	systemd-units >= 38
 BuildRequires:	xz
 Requires(post,preun):	/sbin/chkconfig
